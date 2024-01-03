@@ -92,12 +92,34 @@ let userData = {
     songCurrentTime: 0
 };
 
+// functionallity for playing the displayed songs
+const playSong = (id) => {
+  const song = userData?.songs.find((song) => song.id === id);
+  audio.src = song.src;
+  audio.title = song.title;
+  if (userData?.currentSong === null || userData?.currentSong.id !== song.id) {
+    audio.currentTime = 0;
+  } else {
+    audio.currentTime = userData.songCurrentTime;
+  };
+  userData.currentSong = song;
+  playButton.classList.add('playing');
+  audio.play();
+}
+
+// Pause function
+const pauseSong = () => {
+  userData.songCurrentTime = audio.currentTime;
+  playButton.classList.remove("playing");
+  audio.pause();
+};
+
 // Create a function to render songs
 const renderSongs = (array) => {
     const songsHTML = array.map((song) => {
         return `
         <li id="song-${song.id}" class="playlist-song"></li>
-        <button class="playlist-song-info">
+        <button class="playlist-song-info" onclick="playSong(${song.id}))">
             <span class="playlist-song-title">${song.title}</span>
             <span class="playlist-song-artist">${song.artist}</span>
             <span class="playlist-song-duration">${song.duration}</span>
@@ -108,3 +130,20 @@ const renderSongs = (array) => {
     }).join("");
     playlistSongs.innerHTML = songsHTML;
 }
+
+// playSong play function
+playButton.addEventListener('click', () => {
+  if (userData?.currentSong === null) {
+    playSong(userData?.songs[0].id)
+  } else {
+    playSong(userData?.currentSong.id)
+  }
+})
+
+// pauseSong function and pauseButton link
+pauseButton.addEventListener('click', pauseSong);
+
+// Call function to render songs
+renderSongs(userData?.songs);
+
+// Step 36
