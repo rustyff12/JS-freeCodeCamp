@@ -114,6 +114,12 @@ const pauseSong = () => {
   audio.pause();
 };
 
+const playNextSong = () => {
+  if (userData?.currentSong === null) {
+    playSong(userData?.songs[0].id)
+  }
+}
+
 // Create a function to render songs
 const renderSongs = (array) => {
     const songsHTML = array.map((song) => {
@@ -130,6 +136,8 @@ const renderSongs = (array) => {
     }).join("");
     playlistSongs.innerHTML = songsHTML;
 }
+
+const getCurrentSongIndex = () => userData?.songs.indexOf(userData.currentSong);
 
 // playSong play function
 playButton.addEventListener('click', () => {
